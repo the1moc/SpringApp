@@ -29,12 +29,14 @@ Things not done
 ## **Running the application**
 
 ### Required
-MySQL server instance and blank database running: localhost:3306/shiftdb - username = sa, password = spcol (can be altered in application.properties)
+MySQL server instance and blank database running: localhost:3306/shiftdb - username = sa, password = spcol
+
+**Any of these details can be changed in the application.properties file as per desire**
 
 ### Execution
 Navigate to the root of the application, and run mvn spring-boot:run (opens to local port 8080)
 
-Enter username and password
+Enter username and password (firstuser / password)
 
 #### Available API endpoints
 api/getAllShifts
