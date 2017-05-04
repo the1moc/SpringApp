@@ -5,7 +5,7 @@ var config = {
 
     output: {
         filename: "bundle.js",
-        path: "./src/main/resources/static/"
+        path: "./src/main/resources/static/",
     },
     module: {
         loaders: [
@@ -19,7 +19,7 @@ var config = {
             }
         ],
     },
-    plugins: [
+        plugins: [
     new webpack.ProvidePlugin({
         $: "jquery",
         jQuery: "jquery"

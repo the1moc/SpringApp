@@ -15,6 +15,8 @@ import malcolm.com.SpringHateOAS.Repositories.ShiftsRepository;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /** Main controller for shift API requests.
  * @author malcolm-campbell
@@ -49,6 +51,7 @@ public class ShiftController {
         return new ResponseEntity<List<Shift>>(shifts, HttpStatus.OK);
     }
     
+    
     /** Fetch all the shifts for all workers with the given first and last name.
      * @param firstName The first name for the worker.
      * @param lastName The last name for the worker.
@@ -68,7 +71,16 @@ public class ShiftController {
      */
     @RequestMapping("/shiftsOnDay/{day}")
     public ResponseEntity<List<Shift>> getShiftsOnSpecificDay(@PathVariable("day") String day) {
-    	List<Shift> shifts = shiftRepo.findByDay(day);
+    	List<Shift> shifts;
+    	
+    	if(day.equals("All days"))
+    	{
+        	shifts = shiftRepo.getAllShifts();
+    	}
+    	else
+    	{
+        	shifts = shiftRepo.findByDay(day);
+    	}
     	shifts.forEach(shift -> shift.add(linkTo(methodOn(ShiftController.class).getShiftsByFirstName(day)).withSelfRel()));
 
         return new ResponseEntity<List<Shift>>(shifts, HttpStatus.OK);
@@ -80,7 +92,17 @@ public class ShiftController {
      */
     @RequestMapping("/shiftsAtTime/{time}")
     public ResponseEntity<List<Shift>> getShiftsAtSpecificTime(@PathVariable("time") String time) {
-    	List<Shift> shifts = shiftRepo.findByTime(time);
+    	List<Shift> shifts;
+    	
+    	if (time.equals("All times"))
+    	{
+    		shifts = shiftRepo.getAllShifts();
+    	}
+    	else
+    	{
+    		shifts = shiftRepo.findByTime(time);
+    	}
+    	
     	shifts.forEach(shift -> shift.add(linkTo(methodOn(ShiftController.class).getShiftsAtSpecificTime(time)).withSelfRel()));
 
         return new ResponseEntity<List<Shift>>(shifts, HttpStatus.OK);

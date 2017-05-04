@@ -31916,6 +31916,7 @@ var jQuery = __webpack_require__(31);
 
 var baseUrl = "http://localhost:8080/api/";
 
+// Creation of the main app
 var App = React.createClass({
   displayName: 'App',
 
@@ -31923,6 +31924,7 @@ var App = React.createClass({
     this.getAllShifts();
   },
 
+  // Set the starting state for the select options
   getInitialState: function getInitialState() {
     return { shifts: [],
       timeValues: ["Morning", "Afternoon", "Evening"],
@@ -31931,14 +31933,7 @@ var App = React.createClass({
     };
   },
 
-  changeDay: function changeDay(event) {
-    this.setState({ dayValue: event.target.value });
-  },
-
-  changeTime: function changeTime(event) {
-    this.setState({ timeValue: event.target.value });
-  },
-
+  // Fetch the initial shifts from the server.
   getAllShifts: function getAllShifts() {
     var _this = this;
 
@@ -31949,6 +31944,37 @@ var App = React.createClass({
     });
   },
 
+  changeDay: function changeDay(event) {
+    this.setState({ dayValue: event.target.value });
+  },
+
+  changeTime: function changeTime(event) {
+    this.setState({ timeValue: event.target.value });
+  },
+
+  filterDay: function filterDay(e) {
+    var selectedDay = $(".selectionOptionsDays select")[0].value;
+    var _this = this;
+    $.ajax({
+      url: baseUrl + "shiftsOnDay/" + selectedDay,
+      contentType: "application/json"
+    }).then(function (data) {
+      _this.setState({ shifts: data });
+    });
+  },
+
+  filterTime: function filterTime(e) {
+    var selectedTime = $(".selectionOptionsTimes select")[0].value;
+    var _this = this;
+    $.ajax({
+      url: baseUrl + "shiftsAtTime/" + selectedTime,
+      contentType: "application/json"
+    }).then(function (data) {
+      _this.setState({ shifts: data });
+    });
+  },
+
+  // Render containing shiftstable and selections
   render: function render() {
     return React.createElement(
       'div',
@@ -31960,7 +31986,7 @@ var App = React.createClass({
       ),
       React.createElement(
         'div',
-        { className: 'selections' },
+        { className: 'selectionsContainer' },
         React.createElement(
           'div',
           { className: 'selectionOptionsDays' },
@@ -32011,6 +32037,15 @@ var App = React.createClass({
         ),
         React.createElement(
           'div',
+          { className: 'buttonContainer' },
+          React.createElement(
+            'button',
+            { type: 'button', className: 'selection-submit', onClick: this.filterDay },
+            'Filter Day!'
+          )
+        ),
+        React.createElement(
+          'div',
           { className: 'selectionOptionsTimes' },
           React.createElement(
             'select',
@@ -32036,12 +32071,27 @@ var App = React.createClass({
               'All times'
             )
           )
+        ),
+        React.createElement(
+          'div',
+          { className: 'buttonContainer' },
+          React.createElement(
+            'button',
+            { type: 'button', className: 'selection-submit', onClick: this.filterTime },
+            'Filter Time!'
+          ),
+          React.createElement(
+            'a',
+            { href: 'logout' },
+            'Logout'
+          )
         )
       )
     );
   }
 });
 
+// React element for shift component
 var Shift = React.createClass({
   displayName: 'Shift',
 
@@ -32073,6 +32123,7 @@ var Shift = React.createClass({
   }
 });
 
+// React element for shifts table
 var ShiftTable = React.createClass({
   displayName: 'ShiftTable',
 

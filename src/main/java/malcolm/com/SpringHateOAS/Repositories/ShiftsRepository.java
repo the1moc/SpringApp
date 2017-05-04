@@ -37,11 +37,19 @@ public interface ShiftsRepository extends CrudRepository<Shift, Long> {
 						+ "WHERE days.day = :day";
 
 	// Query by time.
-	String getByTime = "SELECT shifts.id, worker.firstname, worker.lastName, days.day, times.TimeOfDay as time FROM shifts "
+	String getByTime = "SELECT shifts.id, workers.firstname, workers.lastName, days.day, times.TimeOfDay as time FROM shifts "
+						+ "INNER JOIN times on shifts.TimeId = times.Id "
+						+ "INNER JOIN days on shifts.DayId = days.Id "
+						+ "INNER JOIN workers on shifts.WorkerId = workers.Id "
+						+ "WHERE times.TimeOfDay = :time";
+	
+	// Query by time and day.
+	String getByDayAndTime = "SELECT shifts.id, worker.firstname, worker.lastName, days.day, times.TimeOfDay as time FROM shifts "
 						+ "INNER JOIN times on shifts.TimeId = times.Id "
 						+ "INNER JOIN days on shifts.DayId = days.Id "
 						+ "INNER JOIN worker on shifts.WorkerId = workers.Id "
-						+ "WHERE times.TimeOfDay = :time";
+						+ "WHERE times.TimeOfDay = :time" 
+						+ "AND days.day = :day";
 	
 	@Query(value = getAllQuery, nativeQuery = true)
 	List<Shift> getAllShifts();
@@ -57,4 +65,7 @@ public interface ShiftsRepository extends CrudRepository<Shift, Long> {
 	
 	@Query(value = getByTime, nativeQuery = true)
 	List<Shift> findByTime(@Param("time") String time);
+	
+	@Query(value = getByDayAndTime, nativeQuery = true)
+	List<Shift> filterShifts(@Param("day") String day, @Param("time") String time);
 }

@@ -1,0 +1,7 @@
+malcolm\com\SpringHateOAS\Models\Shift.class
+malcolm\com\SpringHateOAS\Repositories\ShiftsRepository.class
+malcolm\com\SpringHateOAS\Controllers\ShiftController.class
+malcolm\com\SpringHateOAS\Controllers\WebSecurityConfig.class
+malcolm\com\SpringHateOAS\Database\DatabaseInitialization.class
+malcolm\com\SpringHateOAS\Application.class
+malcolm\com\SpringHateOAS\Controllers\HomeController.class
